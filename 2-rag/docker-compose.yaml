@@ -1,0 +1,87 @@
+services:
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    restart: unless-stopped
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: [gpu]
+
+  ollama-init:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: >
+      sh -c "
+      ollama pull nomic-embed-text &&
+      ollama pull llama3.2:1b &&
+      ollama pull qwen3-embedding:0.6b &&
+      ollama pull all-minilm:l6-v2 &&
+      ollama pull qllama/bge-small-en-v1.5 &&
+      ollama pull qllama/bge-reranker-v2-m3
+      "
+    restart: "no"
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: chromadb
+    volumes:
+      - chromadb_data:/chroma/chroma
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  docling:
+    image: ghcr.io/docling-project/docling-serve-cpu:latest
+    container_name: docling-service
+    environment:
+      - HF_TOKEN=${HF_TOKEN}
+    volumes:
+      - docling_cache:/root/.cache/huggingface
+    ports:
+      - "5001:5001"
+    restart: unless-stopped
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    depends_on:
+      - chromadb
+      - ollama
+      - docling
+    ports:
+      - "3000:8080"
+    volumes:
+      - open_webui_data:/app/backend/data
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - VECTOR_DB=chroma
+      - CHROMA_HTTP_HOST=chromadb
+      - CHROMA_HTTP_PORT=8000
+      - RAG_EMBEDDING_ENGINE=ollama
+      - RAG_EMBEDDING_MODEL=qllama/bge-small-en-v1.5
+      - WEBUI_TIMEOUT=300
+    restart: unless-stopped
+
+volumes:
+
+  ollama_data:
+    name: ollama_data
+
+  chromadb_data:
+    name: chromadb_data
+
+  docling_cache:
+    name: docling_cache
+
+  open_webui_data:
+    name: open_webui_data
