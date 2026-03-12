@@ -1,36 +1,5 @@
 services:
 
-  ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    volumes:
-      - ollama_data:/root/.ollama
-    ports:
-      - "11434:11434"
-    restart: unless-stopped
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - capabilities: [gpu]
-
-  ollama-init:
-    image: ollama/ollama:latest
-    depends_on:
-      - ollama
-    environment:
-      - OLLAMA_HOST=http://ollama:11434
-    entrypoint: >
-      sh -c "
-      ollama pull nomic-embed-text &&
-      ollama pull llama3.2:1b &&
-      ollama pull qwen3-embedding:0.6b &&
-      ollama pull all-minilm:l6-v2 &&
-      ollama pull qllama/bge-small-en-v1.5 &&
-      ollama pull qllama/bge-reranker-v2-m3
-      "
-    restart: "no"
-
   chromadb:
     image: chromadb/chroma:latest
     container_name: chromadb
@@ -45,6 +14,7 @@ services:
     container_name: docling-service
     environment:
       - HF_TOKEN=${HF_TOKEN}
+      - DOCLING_MAX_WORKERS=4
     volumes:
       - docling_cache:/root/.cache/huggingface
     ports:
@@ -56,20 +26,29 @@ services:
     container_name: open-webui
     depends_on:
       - chromadb
-      - ollama
       - docling
     ports:
       - "3000:8080"
     volumes:
       - open_webui_data:/app/backend/data
     environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
+
+      # Ollama bare metal
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_KEEP_ALIVE=24h
+
+      # Base vetorial
       - VECTOR_DB=chroma
       - CHROMA_HTTP_HOST=chromadb
       - CHROMA_HTTP_PORT=8000
+
+      # Embeddings Ollama
       - RAG_EMBEDDING_ENGINE=ollama
-      - RAG_EMBEDDING_MODEL=qllama/bge-small-en-v1.5
+      - RAG_EMBEDDING_MODEL=qllama/bge-base-en-v1.5
+
+      # Timeout ampliado
       - WEBUI_TIMEOUT=300
+
     restart: unless-stopped
 
 volumes:
