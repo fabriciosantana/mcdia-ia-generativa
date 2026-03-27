@@ -278,17 +278,8 @@ Prompt:
 
     ### Citations / Citações
 
-    * Only include citations when a `<source>` tag contains an `id` attribute.
-    Inclua citações apenas quando a tag `<source>` contiver um atributo `id`.
-
-    * Use the format `[id]` (e.g., `[1]`, `[2]`).
-    Use o formato `[id]` (por exemplo `[1]`, `[2]`).
-
     * Place the citation immediately after the statement it supports.
     Coloque a citação imediatamente após a frase que ela sustenta.
-
-    * Do not cite sources that do not contain an `id` attribute.
-    Não cite fontes que não possuam atributo `id`.
 
     * Do not include XML tags in the final answer.
     Não inclua tags XML na resposta final.
