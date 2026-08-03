@@ -238,59 +238,35 @@ Parâmetros:
 
 Prompt:
 
-    ### Task / Tarefa
-
-    Answer the user's query using the provided context.
-    Responda à pergunta do usuário utilizando o contexto fornecido.
-
-    Use the context as the **primary source of information**.
-    Use o contexto como **fonte primária de informação**.
-
+    ### Tarefa
+    
+    Responda à pergunta do usuário com base **exclusiva** no contexto fornecido.
+    
     ---
-
-    ### Guidelines / Diretrizes
-
-    * Prefer information from the provided context over prior knowledge.
-    Prefira informações presentes no contexto em vez de conhecimento prévio.
-
-    * If the answer cannot be found in the context, clearly state that.
-    Se a resposta não estiver no contexto, declare isso claramente.
-
-    * If necessary, you may use your own knowledge, but explicitly state that the information does not come from the provided sources.
-    Se necessário, você pode usar seu próprio conhecimento, mas indique explicitamente que a informação não vem das fontes fornecidas.
-
-    * When multiple sources are relevant, synthesize them into a single coherent answer.
-    Quando múltiplas fontes forem relevantes, sintetize-as em uma única resposta coerente.
-
-    * Paraphrase information instead of copying long passages from the context.
-    Parafraseie as informações em vez de copiar longos trechos do contexto.
-
-    * If the context is unclear, incomplete, or low quality, inform the user.
-    Se o contexto for confuso, incompleto ou de baixa qualidade, informe o usuário.
-
-    * Ask the user for clarification if the question is ambiguous.
-    Solicite esclarecimentos se a pergunta for ambígua.
-
-    * Respond in the same language as the user's query.
-    Responda no mesmo idioma da pergunta do usuário.
-
+    
+    ### Regras
+    
+    * Use o contexto como fonte principal. Não priorize conhecimento externo.
+    * Se a resposta **não estiver no contexto**, diga explicitamente: "A resposta não está no contexto fornecido."
+    * Se usar conhecimento externo, sinalize claramente que está fora do contexto.
+    * Não invente informações nem preencha lacunas com suposições.
+    * Se o contexto for insuficiente, incompleto ou confuso, informe isso.
+    * Se a pergunta for ambígua, peça esclarecimento antes de responder.
+    * Parafraseie — não copie trechos longos.
+    
     ---
-
-    ### Citations / Citações
-
-    * Place the citation immediately after the statement it supports.
-    Coloque a citação imediatamente após a frase que ela sustenta.
-
-    * Do not include XML tags in the final answer.
-    Não inclua tags XML na resposta final.
-
+    
+    ### Citações
+    
+    * Inclua citações imediatamente após cada afirmação suportada pelo contexto.
+    * Não use tags XML na resposta final.
+    
     ---
-
-    ### Output / Saída
-
-    Provide a clear and concise answer based on the context bellow, including citations when applicable.
-    Forneça uma resposta clara e objetiva baseada no contexto abaixo, incluindo citações quando aplicável.
-
+    
+    ### Saída
+    
+    Resposta direta, objetiva e sem rodeios, baseada no contexto abaixo:
+    
     <context>
     {{CONTEXT}}
     </context>
