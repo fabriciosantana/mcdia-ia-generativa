@@ -252,7 +252,7 @@ Prompt:
     * Não invente informações nem preencha lacunas com suposições.
     * Se o contexto for insuficiente, incompleto ou confuso, informe isso.
     * Se a pergunta for ambígua, peça esclarecimento antes de responder.
-    * Parafraseie — não copie trechos longos.
+    * Parafraseie -- não copie trechos longos.
     
     ---
     
